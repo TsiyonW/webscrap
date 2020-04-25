@@ -1,15 +1,23 @@
 {
-	"scripts": {
-		"start": "node index.js"
-		, "dev": "cross-env NODE_ENV=development node index.js"
-
-		, "deploy": "git push --force heroku master"
-	}
-	, "dependencies": {
-		"nightmare": "^3.0.2"
-	}
-	, "devDependencies": {
-		"cross-env": "5.x"
-	}
-	
+  "name": "nightmare-heroku",
+  "version": "1.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+      "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TsiyonW/webscrap.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TsiyonW/webscrap"
+  },
+  "homepage": "https://github.com/TsiyonW/webscrap.git",
+  "dependencies": {
+	"electron": "^1.6.10",		
+	"nightmare": "^3.0.2"
+  }
 }

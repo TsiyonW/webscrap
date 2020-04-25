@@ -1,71 +1,63 @@
-<h1 align="center">Nightmare Heroku Example</h1>
-
 <p align="center">
-	<a title="Nightmare" href="http://www.nightmarejs.org/"><b>Nightmare</b></a>
-</p>
-<p align="center">
-	<a title="Heroku" href="https://www.heroku.com/"><img alt="Heroku" src="https://github.com/logo/heroku/blob/master/images/logo.svg" width="" height="64"></a>
-</p>
+  <img src="https://user-images.githubusercontent.com/1651212/27013967-6cbd6b8a-4ebc-11e7-9cd8-e5d0fcb01440.png" alt="logo" width="600px" />
+ </p>
 
-<p align="center">
-	<br><a title="GitPunch" href="https://gitpunch.com/"><img alt="GitPunch" src="https://raw.githubusercontent.com/vfeskov/gitpunch/master/client/src/big-logo.png" width="222" height="52"></a>
-	<br>⭐ Star and get notified about new releases via email.
-</p>
 
-## Getting Started
-- Initial steps
-	- Install <a title="Node.js" href="https://nodejs.org/en/"><img alt="Node.js" src="https://camo.githubusercontent.com/9c24355bb3afbff914503b663ade7beb341079fa/68747470733a2f2f6e6f64656a732e6f72672f7374617469632f696d616765732f6c6f676f2d6c696768742e737667" width="" height="18"></a> and <a title="Yarn" href="https://yarnpkg.com/lang/en/"><img alt="Yarn" src="https://raw.githubusercontent.com/yarnpkg/assets/master/yarn-kitten-full.svghttps://raw.githubusercontent.com/yarnpkg/assets/master/yarn-kitten-full.png" width="" height="18"></a>.
-	- Install <a title="Heroku CLI" href="https://devcenter.heroku.com/articles/heroku-cli#download-and-install"><img alt="Heroku CLI" src="https://github.com/logo/heroku/blob/master/images/logo.svg" width="" height="18"> CLI</a> and <a title="Git" href="https://git-scm.com/downloads"><img alt="Git" src="https://cdn.svgporn.com/logos/git.svg" width="" height="18"></a>.
-	- [Download](https://github.com/kireerik/nightmare-heroku-example/archive/master.zip) or [clone](github-windows://openRepo/https://github.com/kireerik/nightmare-heroku-example) this repository.
-	- Open a command prompt in the project folder.
+# NightmareJS on Heroku <a href="https://heroku.com/deploy" target="_blank"><img src="https://www.herokucdn.com/deploy/button.svg" alt="Heroku deploy" align="right"></a>
 
-> Install dependencies:
-> ```shell
-> yarn install
-> ```
+[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/oscarmorrison/nightmare-heroku/issues)
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg?style=plastic)](https://github.com/oscarmorrison/nightmare-heroku/blob/master/LICENSE)  [![GitHub issues](https://img.shields.io/github/issues/oscarmorrison/nightmare-heroku.svg)](https://github.com/oscarmorrison/nightmare-heroku/issues)
 
-Start the script:
-> ```shell
-> yarn start
-> ```
 
-## Development
-Start the script in development mode:
-> ```shell
-> yarn dev
-> ```
+## Intro
 
-## Set up Heroku app
-Create a new app from the Heroku Dashboard.
+[NightmareJS](http://www.nightmarejs.org/) is an awesome highlevel webscraping and browser automation library built ontop of electron. This repo is a good starting place to be able to use it with some default setups ontop of heroku using the following instructions. [Read more](http://blog.oscarmorrison.com/nightmarejs-on-heroku-the-ultimate-scraping-setup/)
 
-Go to Settings / Buildpacks and add the following buildpacks:
-> `https://github.com/heroku/heroku-buildpack-apt`
-> <br>`https://github.com/captain401/heroku-buildpack-xvfb.git`
-> <br>`https://github.com/benschwarz/heroku-electron-buildpack.git`
-> <br>`heroku/nodejs`
+## Getting started
+- `git clone --depth 1 git@github.com:oscarmorrison/nightmare-heroku [new-project-name]`
 
-Modify the stack:
-> ```shell
-> heroku stack:set cedar-14 --app HEROKU_APP_NAME
-> ```
+- `cd [new-project-name]`
+- `rm -rf .git`
+- `git init`
+- setup git remote repository on github.com from existing code
+```
+git remote add origin git@github.com:[username]/[new-project-name].git
+git add -A
+git commit -m "Initial commit"
+git push -u origin master
+```
+- `heroku create`
+- `heroku stack:set cedar-14`
+- set build packs
+```
+heroku buildpacks:add --index 1 https://github.com/heroku/heroku-buildpack-apt &&
+heroku buildpacks:add --index 2 https://github.com/captain401/heroku-buildpack-xvfb.git &&
+heroku buildpacks:add --index 3 https://github.com/causztic/heroku-electron-buildpack.git &&
+heroku buildpacks:add --index 4 https://github.com/heroku/heroku-buildpack-nodejs.git
+```
+- `git push heroku master`
+- goto heroku dashboard and select created app; install `Heroku Scheduler` add-on
+- `heroku ps:scale web=0`
+- `node ./index.js` to verify nightmare runs correctly locally; npm install needs to be run. The following output should be seen.
+```
+Welcome to Nightmare scrape
+==========
+NightmareJS on Heroku the ultimate scraping setup
+=========
+All done
+```
+- Open heroku app from heroku dashboard. 'Application error' is displayed because no routes have been defined yet so this is normal in this case. 
+- `heroku logs` to check output for any errors. If everything went well, near the bottom of the output the 'Welcome to Nightmare scrape' messages as displayed above should appear. Now, you can work on the rest of your code knowing that nightmarejs will work on heroku as it works locally.
 
-> Create a Git repository (if you don't have one already)
+### Debugging
+```heroku run DEBUG=nightmare:*,electron:* xvfb-run --auto-servernum --server-args="-screen 0 1024x768x24" node --harmony index.js
+```
+### Other
 
-Add the remote Heroku repository:
-> ```shell
-> git remote add heroku https://heroku:HEROKU_API_KEY@git.heroku.com/HEROKU_APP_NAME.git
-> ```
-> You can go to the Heroku Dashboard / {profile picture} / Account settings / API Key to get it.
+You may need to set a engines in package.json:
+```
+"engines": {
+      "node": "8.11.4"
+  },
+```
 
-Deploy to Heroku:
-> ```shell
-> yarn deploy
-> ```
-
-Go to the Heroku Dashboard / {app} / Resources and turn the `web` Dyno `off` and the `worker` Dyno `on`.
-
-## Deployment
-Deploy to Heroku:
-> ```shell
-> yarn deploy
-> ```
